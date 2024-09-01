@@ -23,6 +23,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -53,7 +54,7 @@ public class AuthController {
     private final JwtUtils jwtUtils;
 
     @PostMapping("/signup")
-    public ResponseEntity<?> registerUser(@RequestBody SignUpRequest signUpRequest) {
+    public ResponseEntity<MessageResponse> registerUser(@RequestBody SignUpRequest signUpRequest) {
 
         String username = signUpRequest.getUsername();
         String email = signUpRequest.getEmail();
@@ -78,27 +79,15 @@ public class AuthController {
             strRoles.forEach(role -> {
                 switch (role) {
                     case "ROLE_ADMIN":
-                        Role adminRole = null;
-
-                        if(roleService.findByName(ERole.ROLE_ADMIN).isEmpty()){
-                            adminRole = new Role(ERole.ROLE_ADMIN);
-                        }else{
-                            adminRole = roleService.findByName(ERole.ROLE_ADMIN)
-                                    .orElseThrow(() -> new RoleException("Error: Admin Role is not found."));
-                        }
+                        Role adminRole = roleService.findByName(ERole.ROLE_ADMIN)
+                                .orElseGet(() -> new Role(ERole.ROLE_ADMIN));
 
                         roles.add(adminRole);
-
                         break;
-                    default:
-                        Role userRole = null;
 
-                        if(roleService.findByName(ERole.ROLE_USER).isEmpty()){
-                            userRole = new Role(ERole.ROLE_USER);
-                        }else{
-                            userRole = roleService.findByName(ERole.ROLE_USER)
-                                    .orElseThrow(() -> new RoleException("Error: User Role is not found."));
-                        }
+                    default:
+                        Role userRole = roleService.findByName(ERole.ROLE_USER)
+                                .orElseGet(() -> new Role(ERole.ROLE_USER));
 
                         roles.add(userRole);
                 }
@@ -114,7 +103,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> authenticateUser(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<JWTResponse> authenticateUser(@RequestBody LoginRequest loginRequest) {
         String username = loginRequest.getUsername();
         String password = loginRequest.getPassword();
 
@@ -125,7 +114,7 @@ public class AuthController {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         String jwt = jwtUtils.generateJwtToken(userDetails.getUsername());
 
-        List<String> roles = userDetails.getAuthorities().stream().map(item -> item.getAuthority())
+        List<String> roles = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
 
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(userDetails.getId());
@@ -142,7 +131,7 @@ public class AuthController {
     }
 
     @PostMapping("/refreshtoken")
-    public ResponseEntity<?> refreshtoken(@RequestBody TokenRefreshRequest request) {
+    public ResponseEntity<TokenRefreshResponse> refreshtoken(@RequestBody TokenRefreshRequest request) {
 
         String requestRefreshToken = request.getRefreshToken();
 

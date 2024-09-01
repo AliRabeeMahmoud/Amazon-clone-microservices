@@ -17,6 +17,7 @@ spring:
     import: config-server:http://${CONFIG_SERVER_URL:localhost}:9296
 
 jwt:
-  secret: mySecretKey
+  secret: 488883bb806dbd6c78fdb2154fbf1e2ae54dbd6ca82d06da0d9a47111b56f738
+      # encryption key
   expireMs: 120000
-  refreshExpireMs: 120000
+  refreshExpireMs: 86400000L

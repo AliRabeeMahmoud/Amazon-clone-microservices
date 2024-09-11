@@ -4,7 +4,7 @@ import com.example.product_service.payload.request.ProductRequest;
 import com.example.product_service.payload.response.ProductResponse;
 import com.example.product_service.service.ProductService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/product")
 @RequiredArgsConstructor
-@Log4j2
+@Slf4j
 public class ProductController {
 
     private final ProductService productService;

@@ -33,10 +33,7 @@ public class JwtUtils {
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
 
-    public String generateJwtToken(String username) {
 
-        return generateTokenFromUsername(username);
-    }
 
     public String generateTokenFromUsername(String username) {
         UserDetails userPrincipal= customUserDetailsService.loadUserByUsername(username);

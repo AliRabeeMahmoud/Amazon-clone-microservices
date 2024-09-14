@@ -15,7 +15,8 @@ public interface PaymentService {
     @PostMapping
     public ResponseEntity<Long> doPayment(@RequestBody PaymentRequest paymentRequest);
 
-    default ResponseEntity<Long> fallback(Exception e) {
+    default ResponseEntity<Long> fallback(Exception e) {  // fallback is used when request fails or timeouts
+                                                            // i.e. when there is no response
         throw new CustomException("Payment Service is not available",
                 "UNAVAILABLE",
                 500);

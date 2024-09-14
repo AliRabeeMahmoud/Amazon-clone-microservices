@@ -11,7 +11,8 @@ import lombok.extern.log4j.Log4j2;
 import java.io.IOException;
 
 @Log4j2
-public class CustomErrorDecoder implements ErrorDecoder {
+public class CustomErrorDecoder implements ErrorDecoder {  // error decoder is used to transfer the exception
+                                                            // from the remote service to the client
 
     @Override
     public Exception decode(String s, Response response) {

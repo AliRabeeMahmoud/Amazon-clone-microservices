@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Bean;
 import reactor.core.publisher.Mono;
 
 @SpringBootApplication
-//@EnbleEurekaClient
+//@EnableEurekaClient
 @EnableDiscoveryClient
 public class ApiGatewayApplication {
 

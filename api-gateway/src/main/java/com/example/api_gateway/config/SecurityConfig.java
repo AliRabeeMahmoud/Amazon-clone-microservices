@@ -9,6 +9,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.reactive.CorsConfigurationSource;
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
 
+
 import java.util.Arrays;
 
 @Configuration
@@ -20,10 +21,8 @@ public class SecurityConfig {
 
         serverHttpSecurity
                 .csrf(ServerHttpSecurity.CsrfSpec::disable)
-                .authorizeExchange(exchange -> exchange
-                        .anyExchange()
-                        .permitAll())
-                        .cors(corsSpec -> corsSpec.configurationSource(corsConfigurationSource()) );
+                .authorizeExchange(exchange -> exchange.anyExchange().permitAll())
+                .cors(corsSpec -> corsSpec.configurationSource(corsConfigurationSource()) );
         return serverHttpSecurity.build();
 
     }
@@ -31,7 +30,7 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration corsConfig = new CorsConfiguration();
-        corsConfig.setAllowedOrigins(Arrays.asList("https://your-okta-domain.com", "http://localhost:3000"));
+        corsConfig.setAllowedOrigins(Arrays.asList("https://your-domain.com", "http://localhost:3000"));
         corsConfig.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         corsConfig.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
         corsConfig.setAllowCredentials(true);

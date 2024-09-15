@@ -33,6 +33,7 @@ public class ApiGatewayApplication {
 	@Bean
 	KeyResolver userKeySolver() {
 		return exchange -> Mono.just("userKey");
+		// return exchange -> Mono.just(exchange.getRequest().getRemoteAddress().getAddress().getHostAddress());
 	}
 
 }

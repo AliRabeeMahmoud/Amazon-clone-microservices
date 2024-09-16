@@ -8,11 +8,11 @@ import org.springframework.cloud.circuitbreaker.resilience4j.Resilience4JConfigB
 import org.springframework.cloud.client.circuitbreaker.Customizer;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.gateway.filter.ratelimit.KeyResolver;
+import org.springframework.cloud.gateway.filter.ratelimit.PrincipalNameKeyResolver;
 import org.springframework.context.annotation.Bean;
 import reactor.core.publisher.Mono;
 
 @SpringBootApplication
-//@EnableEurekaClient
 @EnableDiscoveryClient
 public class ApiGatewayApplication {
 
@@ -32,7 +32,8 @@ public class ApiGatewayApplication {
 
 	@Bean
 	KeyResolver userKeySolver() {
-		return exchange -> Mono.just("userKey");
+		return new PrincipalNameKeyResolver();
+
 		// return exchange -> Mono.just(exchange.getRequest().getRemoteAddress().getAddress().getHostAddress());
 	}
 

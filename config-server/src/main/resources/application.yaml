@@ -16,7 +16,7 @@ spring:
 #      server:
 #        git:
 #          username: Rapter1990
-#          password: '{cipher}<encrypted password>'
+#          password:
 #          uri: https://github.com/Rapter1990/springappconfig
 #          clone-on-start: true
 

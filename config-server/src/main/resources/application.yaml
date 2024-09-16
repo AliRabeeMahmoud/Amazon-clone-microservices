@@ -2,23 +2,15 @@ spring:
   zipkin:
     baseUrl: http://zipkin-svc:9411
   application:
-    name: config-server
+    name: CONFIG-SERVER
 
 
   profiles:
-      active: native  #local repository. if you want external repo, replace it with "git"
+      active: native    #local repository. if you want external repo, replace it with "git"
 
   server:
     port: 9296
 
-#  cloud:
-#    config:
-#      server:
-#        git:
-#          username: Rapter1990
-#          password:
-#          uri: https://github.com/Rapter1990/springappconfig
-#          clone-on-start: true
 
 eureka:
   instance:
@@ -28,5 +20,15 @@ eureka:
     register-with-eureka: true
     service-url:
       defaultZone: ${EUREKA_SERVER_ADDRESS:http://localhost:8761/eureka}
+
+
+#  cloud:
+#    config:
+#      server:
+#        git:
+#          username: Rapter1990
+#          password:
+#          uri: https://github.com/Rapter1990/springappconfig
+#          clone-on-start: true
 
 

@@ -10,6 +10,7 @@ import org.springframework.boot.autoconfigure.security.SecurityProperties;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
+import java.util.List;
 import java.util.function.Function;
 
 @Component
@@ -47,12 +48,13 @@ public class JwtUtils extends SecurityProperties.Filter {
     }
 
 
-    public String[] getRoleNamesFromJwtToken(String token) {
+    public List<String> getRoleNamesFromJwtToken(String token) {
         if(token.startsWith("Bearer")){
             token = token.substring(7);
         }
-        String roles=extractClaim(token, Claims::getIssuer);
-        return  roles.split(" ");
+        Claims claims = extractAllClaims(token);
+        List<String> roles = (List<String>) claims.get("roles");
+        return  roles;
     }
     public boolean validateJwtToken(String authToken) {
         JwtParser jwtParser = Jwts.parser()

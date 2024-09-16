@@ -41,6 +41,8 @@ public class JwtUtils {
         claims.put("authorities", userPrincipal.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList()));
+
+
         return
                 Jwts.builder()
                         .subject(userPrincipal.getUsername())

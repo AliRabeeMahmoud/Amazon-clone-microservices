@@ -1,12 +1,15 @@
 server:
   port: 9090
 
+eureka:
+  client:
+    register-with-eureka: false
 
 spring:
   application:
     name: API-GATEWAY
   config:
-    import: configserver:http://${CONFIG_SERVER_URL:localhost}:9296
+    import: optional:configserver:http://${CONFIG_SERVER_URL:localhost}:9296
   cloud:
     gateway:
       routes:
@@ -68,6 +71,11 @@ logging:
     org.springframework: DEBUG
 
 jwt:
-  secret: mySecretKey
+  secret: 488883bb806dbd6c78fdb2154fbf1e2ae54dbd6ca82d06da0d9a47111b56f738
   expireMs: 120000
   refrEshexpireMs: 120000
+#
+#management:
+#  tracing:
+#    sampling:
+#      probability: 1.0

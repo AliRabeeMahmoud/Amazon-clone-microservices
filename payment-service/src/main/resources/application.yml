@@ -4,17 +4,31 @@ server:
 spring:
   datasource:
     url: jdbc:mysql://${DB_HOST:localhost}:3306/paymentdb?createDatabaseIfNotExist=true
-    username: springmicroserviceuser
-    password: 111111
+    username: root
+    password: ali45
     driverClassName: com.mysql.cj.jdbc.Driver
   jpa:
-    database-platform: org.hibernate.dialect.MySQL57InnoDBDialect
     hibernate:
       ddl-auto: update
   application:
     name: PAYMENT-SERVICE
   config:
-    import: configserver:http://${CONFIG_SERVER_URL:localhost}:9296
+    import: optional:configserver:http://${CONFIG_SERVER_URL:localhost}:9296
 
 jwt:
-  secret: mySecretKey
+  secret: 488883bb806dbd6c78fdb2154fbf1e2ae54dbd6ca82d06da0d9a47111b56f738
+
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: ${EUREKA_SERVER_ADDRESS:http://localhost:8761/eureka}
+
+#
+#management:
+#  tracing:
+#    sampling:
+#      probability: 1.0

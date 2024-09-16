@@ -11,19 +11,24 @@ spring:
     hibernate:
       ddl-auto: update
   application:
-    name: product-service
+    name: PRODUCT-SERVICE
   config:
-    import: configserver:http://${CONFIG_SERVER_URL:localhost}:9296
+    import: optional:configserver:http://${CONFIG_SERVER_URL:localhost}:9296
 
-#eureka:
-#  instance:
-#    prefer-ip-address: true
-#  client:
-#    fetch-registry: true
-#    register-with-eureka: true
-#    service-url:
-#      defaultZone: ${EUREKA_SERVER_ADDRESS:http://localhost:8761/eureka}
-
+eureka:
+  instance:
+    prefer-ip-address: true
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: ${EUREKA_SERVER_ADDRESS:http://localhost:8761/eureka}
 
 jwt:
   secret: 488883bb806dbd6c78fdb2154fbf1e2ae54dbd6ca82d06da0d9a47111b56f738
+#
+#
+#management:
+#  tracing:
+#    sampling:
+#      probability: 1.0

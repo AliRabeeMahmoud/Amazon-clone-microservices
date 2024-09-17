@@ -3,6 +3,7 @@ package com.example.order_service.service.impl;
 import com.example.order_service.exception.CustomException;
 import com.example.order_service.external.client.PaymentService;
 import com.example.order_service.external.client.ProductService;
+import com.example.order_service.jwt.JwtAuthenticationFilter;
 import com.example.order_service.model.Order;
 import com.example.order_service.payload.request.OrderRequest;
 import com.example.order_service.payload.request.PaymentRequest;
@@ -30,9 +31,10 @@ public class OrderServiceImpl implements OrderService {
     private final PaymentService paymentService;
 
     private final RestTemplate restTemplate;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Override
-    public long placeOrder(OrderRequest orderRequest) {
+    public long placeOrder(OrderRequest orderRequest, String token) {
 
         log.info("OrderServiceImpl | placeOrder is called");
 
@@ -44,7 +46,7 @@ public class OrderServiceImpl implements OrderService {
         log.info("OrderServiceImpl | placeOrder | Placing Order Request orderRequest : " + orderRequest.toString());
 
         log.info("OrderServiceImpl | placeOrder | Calling productService through FeignClient");
-        productService.reduceQuantity(orderRequest.getProductId(), orderRequest.getQuantity());
+        productService.reduceQuantity(token, orderRequest.getProductId(), orderRequest.getQuantity());
 
         log.info("OrderServiceImpl | placeOrder | Creating Order with Status CREATED");
         Order order = Order.builder()
@@ -69,7 +71,7 @@ public class OrderServiceImpl implements OrderService {
         String orderStatus = null;
 
         try {
-            paymentService.doPayment(paymentRequest);
+            paymentService.doPayment(token ,paymentRequest);
             log.info("OrderServiceImpl | placeOrder | Payment done Successfully. Changing the Oder status to PLACED");
             orderStatus = "PLACED";
         } catch (Exception e) {

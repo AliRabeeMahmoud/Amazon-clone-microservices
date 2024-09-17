@@ -8,7 +8,7 @@ spring:
   profiles:
       active: native    #local repository. if you want external repo, replace it with "git"
 
-  server:
+server:
     port: 9296
 
 

@@ -20,13 +20,13 @@ public class OrderController {
 
     @PreAuthorize("hasAuthority('ROLE_USER')")
     @PostMapping("/placeorder")
-    public ResponseEntity<Long> placeOrder(@RequestBody OrderRequest orderRequest) {
+    public ResponseEntity<Long> placeOrder(@RequestBody OrderRequest orderRequest, @RequestHeader("Authorization") String bearerToken) {
 
         log.info("OrderController | placeOrder is called");
 
         log.info("OrderController | placeOrder | orderRequest: {}", orderRequest.toString());
 
-        long orderId = orderService.placeOrder(orderRequest);
+        long orderId = orderService.placeOrder(orderRequest, bearerToken);
         log.info("Order Id: {}", orderId);
         return new ResponseEntity<>(orderId, HttpStatus.OK);
     }

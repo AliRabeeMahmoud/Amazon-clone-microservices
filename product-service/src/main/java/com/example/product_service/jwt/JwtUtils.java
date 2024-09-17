@@ -53,7 +53,7 @@ public class JwtUtils extends SecurityProperties.Filter {
             token = token.substring(7);
         }
         Claims claims = extractAllClaims(token);
-        List<String> roles = (List<String>) claims.get("roles");
+        List<String> roles =(List<String>)  claims.get("authorities");
         return  roles;
     }
     public boolean validateJwtToken(String authToken) {

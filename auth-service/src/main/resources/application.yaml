@@ -18,5 +18,5 @@ spring:
 jwt:
   secret: 488883bb806dbd6c78fdb2154fbf1e2ae54dbd6ca82d06da0d9a47111b56f738
       # encryption key
-  expireMs: 1200000
-  refreshExpireMs: 864000000
+  expireMs: 12000000
+  refreshExpireMs: 8640000000

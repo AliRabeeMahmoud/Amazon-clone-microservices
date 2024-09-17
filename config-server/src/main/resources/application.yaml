@@ -26,9 +26,9 @@ eureka:
 #    config:
 #      server:
 #        git:
-#          username: Rapter1990
+#          username: 
 #          password:
-#          uri: https://github.com/Rapter1990/springappconfig
+#          uri: https://github.com/
 #          clone-on-start: true
 
 

@@ -45,7 +45,6 @@ import static org.springframework.util.StreamUtils.copyToString;
 @EnableConfigurationProperties
 @AutoConfigureMockMvc
 @ContextConfiguration(classes = {OrderServiceConfig.class})
-@ActiveProfiles("test")
 public class OrderControllerTest {
 
     @RegisterExtension

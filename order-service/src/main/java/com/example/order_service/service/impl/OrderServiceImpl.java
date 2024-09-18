@@ -31,7 +31,6 @@ public class OrderServiceImpl implements OrderService {
     private final PaymentService paymentService;
 
     private final RestTemplate restTemplate;
-    private final JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Override
     public long placeOrder(OrderRequest orderRequest, String token) {

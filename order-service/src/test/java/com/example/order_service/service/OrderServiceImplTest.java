@@ -15,7 +15,8 @@ import com.example.order_service.utils.PaymentMode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 
@@ -26,7 +27,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
 
-@SpringBootTest
+//@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 public class OrderServiceImplTest {
 
     private OrderRepository orderRepository;
@@ -52,7 +54,7 @@ public class OrderServiceImplTest {
     @Test
     void test_When_Order_Success() {
 
-        String bearerToken = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJVc2VyIiwiaXNzIjoiUk9MRV9VU0VSICIsImlhdCI6MTY3MTU2MTQ3NywiZXhwIjoxNjcxNTYxNTk3fQ.DlxEnvkRKlWxEc_Qm70K5WZw41xYGH6uBc3s_oBe2rYsDiAfQSj9QRfy8fL9cGT5vJvIZkMhRdOqGm0guTh93A";
+        String bearerToken = "488883bb806dbd6c78fdb2154fbf1e2ae54dbd6ca82d06da0d9a47111b56f738";
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -66,25 +68,37 @@ public class OrderServiceImplTest {
                 .thenReturn(Optional.of(order));
 
         when(restTemplate.exchange(
-                "http://PRODUCT-SERVICE/product/" + order.getProductId(),
-                HttpMethod.GET, request, ProductResponse.class).getBody()).thenReturn(getMockProductResponse());
+                "http://PRODUCT-SERVICE/product/" +order.getProductId(),
+                HttpMethod.GET,
+                request,
+                ProductResponse.class))
+                        .thenReturn(new ResponseEntity<>(getMockProductResponse(),HttpStatus.OK) );
 
         when(restTemplate.exchange(
                 "http://PAYMENT-SERVICE/payment/order/" + order.getId(),
-                HttpMethod.GET, request, PaymentResponse.class).getBody()).thenReturn(getMockPaymentResponse());
+                HttpMethod.GET,
+                request,
+                PaymentResponse.class))
+                .thenReturn(new ResponseEntity<>(getMockPaymentResponse(),HttpStatus.OK) );
 
         //Actual
-        OrderResponse orderResponse = orderService.getOrderDetails(1,bearerToken);
+        OrderResponse orderResponse = orderService.getOrderDetails(1,"Bearer "+bearerToken);
 
         //Verification
         verify(orderRepository, times(1)).findById(anyLong());
-        verify(restTemplate, times(1)).getForObject(
-                "http://PRODUCT-SERVICE/product/" + order.getProductId(),
-                ProductResponse.class);
-        verify(restTemplate, times(1)).getForObject(
-                "http://PAYMENT-SERVICE/payment/order/" + order.getId(),
-                PaymentResponse.class);
 
+        verify(restTemplate, times(1)).exchange(
+                eq("http://PRODUCT-SERVICE/product/" + order.getProductId()),
+                eq(HttpMethod.GET),
+                any(HttpEntity.class),
+                eq(ProductResponse.class)
+        );
+        verify(restTemplate, times(1)).exchange(
+                eq("http://PAYMENT-SERVICE/payment/order/" + order.getId()),
+                eq(HttpMethod.GET),
+                any(HttpEntity.class),
+                eq(PaymentResponse.class)
+        );
         //Assert
         assertNotNull(orderResponse);
         assertEquals(order.getId(), orderResponse.getOrderId());
@@ -94,7 +108,7 @@ public class OrderServiceImplTest {
     @Test
     void test_When_Get_Order_NOT_FOUND_then_Not_Found() {
 
-        String bearerToken = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJVc2VyIiwiaXNzIjoiUk9MRV9VU0VSICIsImlhdCI6MTY3MTM5NTQ0MCwiZXhwIjoxNjcxMzk1NTYwfQ.fBhI_flxuuXZfwhd8hEVdfkZkMNobVsi4hAdSXdl5qqWRedJWQWZXwYVdfSof6ezH7myZNQgn-kRNBXIDDHGDQ";
+        String bearerToken = "488883bb806dbd6c78fdb2154fbf1e2ae54dbd6ca82d06da0d9a47111b56f738";
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -116,7 +130,7 @@ public class OrderServiceImplTest {
     @DisplayName("Place Order - Success Scenario")
     @Test
     void test_When_Place_Order_Success() {
-        String bearerToken = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJVc2VyIiwiaXNzIjoiUk9MRV9VU0VSICIsImlhdCI6MTY3MTM5NTQ0MCwiZXhwIjoxNjcxMzk1NTYwfQ.fBhI_flxuuXZfwhd8hEVdfkZkMNobVsi4hAdSXdl5qqWRedJWQWZXwYVdfSof6ezH7myZNQgn-kRNBXIDDHGDQ";
+        String bearerToken = "488883bb806dbd6c78fdb2154fbf1e2ae54dbd6ca82d06da0d9a47111b56f738";
 
         Order order = getMockOrder();
         OrderRequest orderRequest = getMockOrderRequest();
@@ -144,7 +158,7 @@ public class OrderServiceImplTest {
     @Test
     void test_when_Place_Order_Payment_Fails_then_Order_Placed() {
 
-        String bearerToken = "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJVc2VyIiwiaXNzIjoiUk9MRV9VU0VSICIsImlhdCI6MTY3MTM5NTQ0MCwiZXhwIjoxNjcxMzk1NTYwfQ.fBhI_flxuuXZfwhd8hEVdfkZkMNobVsi4hAdSXdl5qqWRedJWQWZXwYVdfSof6ezH7myZNQgn-kRNBXIDDHGDQ";
+        String bearerToken = "488883bb806dbd6c78fdb2154fbf1e2ae54dbd6ca82d06da0d9a47111b56f738";
 
         Order order = getMockOrder();
         OrderRequest orderRequest = getMockOrderRequest();
@@ -178,7 +192,8 @@ public class OrderServiceImplTest {
     }
 
     private PaymentResponse getMockPaymentResponse() {
-        return PaymentResponse.builder()
+        return
+                PaymentResponse.builder()
                 .paymentId(1)
                 .paymentDate(Instant.now())
                 .paymentMode(PaymentMode.CASH)
@@ -189,7 +204,8 @@ public class OrderServiceImplTest {
     }
 
     private ProductResponse getMockProductResponse() {
-        return ProductResponse.builder()
+        return
+                ProductResponse.builder()
                 .productId(2)
                 .productName("iPhone")
                 .price(100)

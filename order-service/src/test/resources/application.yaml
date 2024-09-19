@@ -11,7 +11,7 @@ spring:
   application:
     name: ORDER-SERVICE
   config:
-    import: configserver:http://localhost:9296
+    import: optional:configserver:http://localhost:9296
 
 jwt:
-  secret: mySecretKey
+  secret: 488883bb806dbd6c78fdb2154fbf1e2ae54dbd6ca82d06da0d9a47111b56f738
